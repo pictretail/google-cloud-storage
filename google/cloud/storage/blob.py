@@ -233,7 +233,7 @@ class Blob(_PropertyMixin):
             quoted_name=_quote(self.name))
 
     def generate_signed_url(self, expiration, method='GET',
-                            content_type=None,
+                            content_type=None, headers=None,
                             generation=None, response_disposition=None,
                             response_type=None, client=None, credentials=None):
         """Generates a signed URL for this blob.
@@ -311,6 +311,7 @@ class Blob(_PropertyMixin):
             credentials, resource=resource,
             api_access_endpoint=_API_ACCESS_ENDPOINT,
             expiration=expiration, method=method,
+            headers=headers,
             content_type=content_type,
             response_type=response_type,
             response_disposition=response_disposition,

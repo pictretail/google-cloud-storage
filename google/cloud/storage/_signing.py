@@ -90,11 +90,48 @@ def get_expiration_seconds(expiration):
     return expiration
 
 
+def get_canonical_headers(headers):
+    """Canonicalize headers for signing.
+
+    See:
+    https://cloud.google.com/storage/docs/access-control/signed-urls#about-canonical-extension-headers
+
+    :type headers: Union[dict|List(Tuple(str,str))]
+    :param headers:
+        (Optional) Additional HTTP headers to be included as part of the
+        signed URLs.  See:
+        https://cloud.google.com/storage/docs/xml-api/reference-headers
+        Requests using the signed URL *must* pass the specified header
+        (name and value) with each request for the URL.
+
+    :rtype: str
+    :returns: List of headers, normalized / sortted per the URL refernced above.
+    """
+    if headers is None:
+        headers = []
+    elif isinstance(headers, dict):
+        headers = list(headers.items())
+
+    if not headers:
+        return [], []
+
+    normalized = collections.defaultdict(list)
+    for key, val in headers:
+        key = key.lower().strip()
+        val = " ".join(val.split())
+        normalized[key].append(val)
+
+    ordered_headers = sorted((key, ",".join(val)) for key, val in normalized.items())
+
+    canonical_headers = ["{}:{}".format(*item) for item in ordered_headers]
+    return canonical_headers
+
+
 def generate_signed_url(credentials, resource, expiration,
                         api_access_endpoint='',
                         method='GET', content_md5=None,
                         content_type=None, response_type=None,
-                        response_disposition=None, generation=None):
+                        headers=None,response_disposition=None, generation=None):
     """Generate signed URL to provide query-string auth'n to a resource.
 
     .. note::
@@ -169,7 +206,8 @@ def generate_signed_url(credentials, resource, expiration,
         content_md5 or '',
         content_type or '',
         str(expiration),
-        resource,
+        canonicalize_headers(headers) if headers else '',
+        resource
     ])
 
     # Set the right query parameters.
