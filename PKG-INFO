@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: google-cloud-storage
-Version: 1.3.2
+Version: 1.3.2.1
 Summary: Python Client for Google Cloud Storage
 Home-page: https://github.com/GoogleCloudPlatform/google-cloud-python
 Author: Google Cloud Platform
