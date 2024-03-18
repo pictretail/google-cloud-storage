@@ -114,7 +114,7 @@ def get_canonical_headers(headers):
         headers = list(headers.items())
 
     if not headers:
-        return [], []
+        return []
 
     normalized = collections.defaultdict(list)
     for key, val in headers:
@@ -207,7 +207,7 @@ def generate_signed_url(credentials, resource, expiration,
         content_md5 or '',
         content_type or '',
         str(expiration),
-        get_canonical_headers(headers) if headers else '',
+        ('\n'.join(get_canonical_headers(headers)) if headers else '',
         resource
     ])
 
