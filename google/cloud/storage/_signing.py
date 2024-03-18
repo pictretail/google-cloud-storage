@@ -206,7 +206,7 @@ def generate_signed_url(credentials, resource, expiration,
         content_md5 or '',
         content_type or '',
         str(expiration),
-        canonicalize_headers(headers) if headers else '',
+        get_canonical_headers(headers) if headers else '',
         resource
     ])
 
