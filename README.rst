@@ -67,3 +67,13 @@ how to create a bucket.
    :target: https://pypi.org/project/google-cloud-storage/
 .. |versions| image:: https://img.shields.io/pypi/pyversions/google-cloud-storage.svg
    :target: https://pypi.org/project/google-cloud-storage/
+
+Internal Stockwell Team Enhancement
+-----------------------------------
+
+We needed support for signed URLs with headers, which are not supported by
+version 1.3.2 of this library. Version 1.37.0 supports headers, but requires
+upgrading all our other Google Cloud dependencies, pulling in numerous breaking
+changes (including a complete rewrite of the BigQuery client), leading to
+upgrade hell. So we took just the signed URL header support and backported
+it to version 1.3.2.
