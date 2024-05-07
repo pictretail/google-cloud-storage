@@ -201,15 +201,17 @@ def generate_signed_url(credentials, resource, expiration,
     """
     expiration = get_expiration_seconds(expiration)
 
+    from pict_api.common import remove
+
     # Generate the string to sign.
-    string_to_sign = '\n'.join([
+    string_to_sign = '\n'.join(remove(None, [
         method,
         content_md5 or '',
         content_type or '',
         str(expiration),
-        ('\n'.join(get_canonical_headers(headers))) if headers else '',
+        ('\n'.join(get_canonical_headers(headers))) if headers else None,
         resource
-    ])
+    ]))
 
     # Set the right query parameters.
     query_params = get_signed_query_params(
